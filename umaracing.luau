@@ -7,9 +7,7 @@ local state = {
     ult = true,
     lock = true,
     val = 999,
-    maxval = 999,
-    speedEnabled = false,
-    speed = 67
+    maxval = 999
 }
 
 local tags = {}
@@ -29,14 +27,6 @@ UI.AddTab("uma racing", function(tab)
     sec:Toggle("lock_toggle", "lock stamina", true, function(v)
         state.lock = v
     end)
-    
-    sec:Toggle("speed_toggle", "enable speed hack", false, function(v)
-        state.speedEnabled = v
-    end)
-    
-    sec:SliderInt("speed_slider", "speed amount", 1, 500, state.speed, function(v)
-        state.speed = v
-    end)
 end)
 
 local function clean()
@@ -51,9 +41,9 @@ end
 
 task.spawn(function()
     while true do
-        local my_info = lp:FindFirstChild("Info") or lp:FindFirstChild("info")
-        if my_info then
-            if state.lock then
+        if state.lock then
+            local my_info = lp:FindFirstChild("Info") or lp:FindFirstChild("info")
+            if my_info then
                 local my_stam = my_info:FindFirstChild("Stamina") or my_info:FindFirstChild("stamina")
                 if my_stam then
                     my_stam.Value = state.val
@@ -65,17 +55,6 @@ task.spawn(function()
                 end
             end
         end
-        
-        if state.speedEnabled then
-            local horseStats = lp:FindFirstChild("HorseStats")
-            if horseStats then
-                local speedVal = horseStats:FindFirstChild("Speed")
-                if speedVal then
-                    speedVal.Value = state.speed
-                end
-            end
-        end
-        
         task.wait(0.05)
     end
 end)
